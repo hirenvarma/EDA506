@@ -1,0 +1,34 @@
+---
+title: "github assigment"
+author: "Hiren Varma"
+date: "April 7, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Purpose & Goals of Github
+To set up Github Desktop & Github account to be used for final assignment
+
+
+
+## Information
+Creating readme file from rmarkdown 
+New folder into github Data, Code, Figures, Portfolio
+Type of data to be used in final assignment and adding final file todata
+For final project : Bike Vendor data will be used , it is accounts for the type of bike - mountain,road,,
+and its categorgy. Also pricing compared to various frames .
+
+
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
+
+## Note
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
