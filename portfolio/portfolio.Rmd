@@ -1,0 +1,176 @@
+---
+title: "Code Portfolio"
+author: "Hiren Varma"
+date: "April 10, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#1.Data Import
+
+#To import CSV files
+
+imp1<- read.table("c:/user/example1.csv", header= TRUE, sep= ",")
+
+#note : separator is comma for tab files, header is TRUE keeps variables names from CSV files
+
+#To get Excel files.XLSX 
+#--   sheet name to specify specific sheet to work, or can specify sheet = 1, 2,... for specific sheet
+imp2<- read.xlsx("c:/user/example2.xlsx", sheetName = "mysheet")
+
+
+
+#-------------------------------------------------------------------------------------------------------------
+#2.Data Wrangling
+
+#common wrangling taks used frequently 
+
+#a- Gathering --Many times data columns names donot have variable names instead values , gathering helps to fix this issue 
+
+#eg... data having  Automobile,  2015  2016
+#                    Honda       4500 5400
+#                    Toyota      3900 5700
+# ..... represents car sells by year but column names are values ....by using Gathering we can transform it 
+
+
+cars %>% 
+  gather(`2015`, `2016`, key = "Year", value = "Units")
+  
+  
+#it transforms data by year and outputs units by car  as .....
+#Automibe   Year  Units 
+#Honda      2015  4500
+#Toyota     2015  3900
+#Honda      2016  5400
+#Toyota     2016  5700......
+
+#b-- Spreading 
+#-- is used when observations are part of multiple rows ...
+# Autombie   Year  Type  Count
+#Honda      2015   SuV   3300
+#Honda      2015   Sedan 4100
+#Toyota     2016   SUv   3800
+#Toyota     2016   Sedan 4000 ......................
+
+cars2 %>%
+    spread(key = Type, value = Count)
+    
+#It transforms it in .... Automobile, Year, SUV, Sedan 
+#Honda  2015  3300  4100
+#Toyota 2015  3800  4000.........others
+
+
+#using filter...to select observations..for specific criteria
+
+cars2 %>% filter(year == 2015 , suv >3500)
+
+
+#grouping : using group_by ,,,for grouping and can be nested with other functions for desired outcomes
+cars2 %>% group_by(Automobile)
+
+#arrange:  helps to sort or arrange data in particular manner 
+cars2 %>%
+        group_by(Automobile)%>% 
+        arrange(Suv)
+
+#joins---helps to join datasets for analysis....(inner ,left, full , right ..are common join techinques used)
+
+join1 <- cars %>% left_join(retail_sales)
+
+#similarly other joins can be performed ....
+
+
+#mutate --helps to create new variables as a function .....
+price_to_sales <- bank1 %>% mutate(ps = Revenue/Sales)
+
+#often usfeful,,,in derving in new variables as per the  requirement of analysis 
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------
+
+#3. Visualization..
+#It plays very vital role in data analytics and data science..... 
+#Data visualization techniques can be used at various levels of analysis..from inital data building, finding trends, missing values spread, outliers in variables,etc. Also, to represent data summary instead of large tables, visualization can streamline data summary and helps others to understand data better. Other usage comes in different modelling where depending on research, problem and analysis various techinques can be used and plots can be generated
+
+# Plots: Many ways to establish plots 
+
+# Scatter Plot of Average salary by Year
+attach(salary)
+plot(year, Salary, main="Average Salary by Year For IT Dept", 
+   xlab="Avg_salary ", ylab="Year ", pch=19)
+   
+
+#Histograms are very oftern used for analysis to check data spread by variable
+
+#histogram of Length of hospital stay  - (LOS)
+hist(hosp$LOS)
+
+#we can also upgrade plot formats and other options
+hist(hosp, 
+     main="Average  Length of Hospital Stay", 
+     xlab="LOS", 
+     xlim=c(1,30),
+     col="Red"
+     )
+     
+#Note- we can add title by using main, limit values of x axis by specifying range, change color of bin, and there are others options to modify histogram output
+
+
+#GGPLOT package is useful to create various complex and detailed plots 
+
+#Derving Kaplan Meier Plot using ggplot  to plot survival of patients in clinical trail
+
+#data tumor--from clinical trials, days are patients time in study, param- defines patient status - progression free survival, adverse event, death,progression, censor - to identify event of interest (progression free survival)
+
+#Add survival 
+data(tumor)
+fit = survfit(Surv(days,censor)~param, data=tumor)
+
+
+#It derives survival curves for param
+plot(fit, xlab="Days", ylab="Survival ", main="Kaplan-Meier plot for Phase 2 Study")
+
+
+#Allows to streamline x axis at regular interval
+#ggkm(fit, timeby=90)
+
+
+
+
+
+
+#---------------------------------------------------------------------------------------------------------------
+#4. Analysis 
+
+#Following is analysis of two company (A,B) checking fiancical performance by years(2007 to 2017) , data contains Revenue, Income, expenses,profitbefore tax, tax, net profit, Company, total_liabity, total_assests
+
+
+
+abcl %>% 
+  group_by(Year, company ) %>%                            
+  summarise(min_profit= min(net_profit) max_profit = max(net_profit), mean_profit = mean(profit))  # summary of net profit of Company A and B by years
+  
+  
+  
+#--Calculating finacial raios and comparing for company A,b by years
+  abcl %>%
+ group_by(year, Company) %>%
+ mutate(expense_ratio = expense/revenue, 
+        profit_margin = net_income/sales,
+        gross_margin = profit/sales
+        quick_ratio = sales/revenue,
+        asset_turnover =   sales/total_assets,
+        asset_return=  (Reveune- expense) /total_assets) 
+        
+        
+  
+  
+  
+
+
+
