@@ -1,0 +1,122 @@
+---
+title: "Final Report"
+author: "Hiren Varma"
+date: "April 14, 2019"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Final Report:
+
+#Epicycle of Analysis
+
+# Q1..What is change in  life expectancy in last 15 years ?
+
+# Q2  How income has improved since 2000 ?
+
+## --Data: gapminder : It is a summary of demographics of world  population broadly categorized into 6 regions like America,East Asia & Pacific, etc. 
+
+#Variables : Country- List of country  , Year- data year, Life- Life expectancy , Population- Total Population ,Income - Income of country &  Region- Broader Segment like continent.
+
+# Data Expolration: 
+
+#1.
+
+
+
+#Subsetting data from 2000 to accomodate expectations of data
+```{r xx}
+gap1<- subset(gapminder, gapminder$Year>= 2000)
+
+```
+
+#summary of variables
+summary(gap1)
+
+#Summary of Life Expetancy, Population & Income  by Region  Over Years
+```{r gap1}
+life1<-  aggregate(gap1, by=list(gap1$region, gap1$Year), 
+                    FUN=mean, na.rm= TRUE)
+```
+
+
+#Plot: Overall Life Expectancy  by Year
+```{r gap1_1}
+ggplot(gap1, aes( Year,life, colour = region)) + 
+  geom_point()
+```
+
+
+#Summary of Income by Region Over Years
+```{r gap11}
+ggplot(gap1, aes( Year,income, colour = region)) + 
+  geom_point()
+```
+
+#Summary of Population by Region Over Years
+```{r gap12}
+ggplot(gap1, aes( Year,population, colour = region)) + 
+  geom_point()
+```
+
+
+#Creating  scatterplots with regression lines for overall life expectations
+```{r gap13}
+ggplot(gap1, aes(x= Year, y=life)) +
+     geom_point(shape=1) +    # Use hollow circles
+     geom_smooth() 
+```
+
+# From Regression smoothing we can see life expectancy has improced from appr. 68 to 72 from 2000 to 2015
+
+#Regression for overall income
+```{r gap14}
+gplot(gap1, aes(x= Year, y= income)) +
+    geom_point(shape=1) +    #  circles
+     geom_smooth(method=lm,   #  linear regression line
+                se=FALSE)    # No shaded confidence region
+```
+#Overall Income  has remain stable from 2000 to 2015
+
+#Average Population, Life expectancy and Income by Year & Region.
+```{r gap15}
+ aggregate(gap1,
+                by = list(gap1$Year, gap1$region),
+                FUN = mean, na.rm= TRUE)
+```
+
+# Plot of Average Life expectancy from 2000 to 2015.
+```{r agg16}
+ ggplot(agg1,aes(x= Year, y= life)) +
+     geom_point(shape=1) +    # Use hollow circles
+     geom_smooth() 
+```
+#Overall Average Life Expectancy has improved in 15 years from Year 2000 app. 68 to 72
+
+# Plot of Average Income from 2000 to 2015
+```{r agg1}
+ ggplot(agg1,aes(x= Year, y= income)) +
+      geom_point(shape=1) +    # Use hollow circles
+      geom_smooth() 
+```
+#Overall Average Income has steadily incresaed since 2000 from appr. 14,500 to 16,500
+
+#Findings
+# Overall life expectancy : Mean=  69.89, min = 37 , max= 84.10 , median = 72.2                                         Overall Income : Mean = 16,250 , min = 441, max = 133,734 , median = 9,028                                            From Regression & Scatter plots and by summary of aggregate data both Life Expectancy and Income in the population    has increased in last 15 years from year 2000 to 2015.
+
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+
